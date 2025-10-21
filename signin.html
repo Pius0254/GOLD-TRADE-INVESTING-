@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In – GOLD TRADE INVESTING</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 60px;
+    background:
+      radial-gradient(circle at 25% 30%, rgba(255,255,255,0.15) 0%, transparent 60%),
+      radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 0%, transparent 55%),
+      linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    background-attachment: fixed;
+  }
+  .card {
+    background: rgba(13, 27, 63, 0.92);
+    color: #fff;
+    padding: 28px;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    max-width: 400px;
+    width: 90%;
+    animation: fadeIn .6s ease;
+  }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+  .brand { text-align: center; margin-bottom: 25px; }
+  .brand h1 { font-size: 22px; margin: 6px 0 4px; }
+  .brand span { font-size: 13px; color: #e0e0e0; }
+  label { font-size: 14px; display: block; margin: 10px 0 4px; color: #f5f5f5; }
+  input[type="email"],input[type="password"] { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: #fff; }
+  input::placeholder { color: #ccc; }
+  input:focus { outline: none; border-color: #90caf9; }
+  button { width: 100%; padding: 12px; background-color: #ffcc00; color: #0d1b3f; font-weight: 700; border: none; border-radius: 6px; margin-top: 15px; cursor: pointer; transition: background 0.3s ease; }
+  button:hover { background-color: #fbc02d; }
+  .links { text-align: center; margin-top: 18px; font-size: 14px; color: #e0e0e0; }
+  .links a { color: #90caf9; text-decoration: none; }
+  .links a:hover { text-decoration: underline; }
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #323232; color: #fff; padding: 12px 24px; border-radius: 6px; opacity: 0; pointer-events: none; transition: opacity .3s ease; z-index: 9999; font-size: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+  .toast.show { opacity: 1; }
+  .toast.success { background: #2e7d32; }
+  .toast.error { background: #c62828; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brand">
+    <h1>GOLD TRADE INVESTING</h1>
+    <span>Secure • Reliable • Growth</span>
+  </div>
+  <label for="email">Email</label>
+  <input type="email" id="email" placeholder="Enter your email" required>
+  <label for="password">Password</label>
+  <input type="password" id="password" placeholder="Enter your password" required>
+  <button id="signinBtn">Sign In</button>
+  <div class="links">
+    Don't have an account? <a href="signup.html">Create one</a><br>
+    <a href="#" id="forgotPassword">Forgot Password?</a>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+import { getDatabase, ref, update, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
+
+// ✅ GOLD TRADE INVESTING Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyDcZ_fmMYb52-f6q6rKZwicXHFM1HENoIo",
+  authDomain: "dckex-6be85.firebaseapp.com",
+  databaseURL: "https://dckex-6be85-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "dckex-6be85",
+  storageBucket: "dckex-6be85.firebasestorage.app",
+  messagingSenderId: "534675762848",
+  appId: "1:534675762848:web:d785527442e9f42b5823c5",
+  measurementId: "G-CE8CPKYDBW"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+function toast(msg,type="error",delay=3000){
+  const el=document.getElementById("toast");
+  el.textContent=msg;
+  el.className="toast "+type+" show";
+  setTimeout(()=>el.className="toast "+type,delay);
+}
+
+// ✅ Sign In Function
+document.getElementById("signinBtn").addEventListener("click", async ()=>{
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  if(!email || !password) return toast("Please fill in both fields");
+
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, password);
+    const uid = cred.user.uid;
+
+    // ✅ Update last login time in Realtime Database
+    await update(ref(db, "users/" + uid), {
+      lastLogin: serverTimestamp()
+    });
+
+    toast("Login successful!","success");
+    setTimeout(()=>location.href="dashboard.html",1200);
+
+  } catch(err) {
+    console.error("Signin error:", err);
+    toast("Login failed: "+(err.code||err.message||"Unknown"));
+  }
+});
+
+// ✅ Password Reset
+document.getElementById("forgotPassword").addEventListener("click", async ()=>{
+  const email = prompt("Enter your email to reset password:");
+  if(!email) return;
+  try {
+    await sendPasswordResetEmail(auth, email);
+    toast("Password reset email sent!","success");
+  } catch(err){
+    toast("Error: "+(err.code||err.message));
+  }
+});
+</script>
+</body>
+</html>
