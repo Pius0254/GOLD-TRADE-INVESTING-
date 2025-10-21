@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOLD TRADE INVESTING – Dashboard</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-compat.js"></script>
+
+<!-- Firebase Config -->
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDcZ_fmMYb52-f6q6rKZwicXHFM1HENoIo",
+  authDomain: "dckex-6be85.firebaseapp.com",
+  databaseURL: "https://dckex-6be85-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "dckex-6be85",
+  storageBucket: "dckex-6be85.firebasestorage.app",
+  messagingSenderId: "534675762848",
+  appId: "1:534675762848:web:d785527442e9f42b5823c5",
+  measurementId: "G-CE8CPKYDBW"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+</script>
+
+<style>
+*{-webkit-user-select:none;-ms-user-select:none;user-select:none}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#004d26;color:#fff}
+.page-content{padding-bottom:1cm}
+header{background:#007a3d;display:flex;align-items:center;gap:10px;padding:12px 16px}
+header img{height:32px}
+header h2{margin:0;font-size:1.2rem;color:#fff}
+.announcement{background:#00994c;color:#ff0;padding:8px;white-space:nowrap;overflow:hidden}
+.announcement span{display:inline-block;padding-left:100%;animation:scroll 16s linear infinite}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+.balance-section{text-align:center;background:#006633;padding:18px 12px;border-radius:12px;margin:12px}
+.balance-section .email{font-size:.85rem;color:#c1ffb3}
+.balance-section .balance{font-size:1.4rem;margin:8px 0;color:#e6ffcc}
+.balance-buttons{display:flex;justify-content:space-around;margin-top:10px}
+.balance-buttons button,.claim-btn{
+  background:linear-gradient(90deg,#00c853,#007a3d);
+  color:#fff;border:none;border-radius:8px;
+  padding:8px 0;width:90px;font-weight:600;
+  cursor:pointer;transition:transform .2s ease,opacity .2s ease;
+}
+.claim-btn{width:auto;padding:8px 18px;font-weight:700}
+.balance-buttons button:hover,.claim-btn:hover{transform:scale(1.05);opacity:.9}
+.extra-info{text-align:center;padding:16px}
+.extra-info p{font-size:.9rem;line-height:1.4}
+.task-countdown{background:#004d26;text-align:center;padding:8px;font-weight:600;color:#c1ffb3}
+.vip-list{padding:10px}
+.vip-box{display:flex;justify-content:space-between;align-items:center;background:#006633;padding:10px;margin:6px 0;border-radius:8px;
+box-shadow:0 0 10px 1px rgba(0,255,128,0.2),inset 0 0 10px rgba(0,255,128,0.1);
+animation:green-glow 3s ease-in-out infinite alternate;}
+@keyframes green-glow{
+from{box-shadow:0 0 10px 1px rgba(0,255,128,0.2),inset 0 0 10px rgba(0,255,128,0.1);}
+to{box-shadow:0 0 25px 3px rgba(0,255,128,0.6),inset 0 0 15px rgba(0,255,128,0.3);}
+}
+.vip-box img{height:38px}
+.vip-box .info{flex-grow:1;margin-left:8px}
+.vip-box .info .amount{font-weight:600;color:#ccff99}
+.vip-box .arrow{font-size:22px;cursor:pointer}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#007a3d;padding:8px 0}
+nav a{color:#fff;text-decoration:none;text-align:center;font-size:.8rem}
+nav i{font-size:18px}
+.popup{
+  position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  background:#00a84f;color:#fff;
+  padding:16px 20px;border-radius:8px;
+  font-weight:600;z-index:9999;text-align:center;
+  box-shadow:0 0 12px rgba(0,0,0,0.5);
+  animation:fadeInOut 3s ease forwards;
+}
+.popup.red{background:#cc0000}
+@keyframes fadeInOut{
+  0%{opacity:0;transform:translate(-50%,-60%)}
+  10%{opacity:1;transform:translate(-50%,-50%)}
+  90%{opacity:1;transform:translate(-50%,-50%)}
+  100%{opacity:0;transform:translate(-50%,-40%)}
+}
+#loader{position:fixed;top:0;left:0;width:100%;height:100%;background:#004d26;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:10000;}
+.loader-spinner{width:70px;height:70px;border:6px solid rgba(255,255,255,0.2);border-top:6px solid #00e676;border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{100%{transform:rotate(360deg)}}
+#loader p{color:#c1ffb3;font-weight:bold;margin-top:10px;font-size:1rem;}
+.hidden{opacity:0;visibility:hidden;transition:opacity .5s ease;}
+.disabled-btn{background:gray !important;cursor:not-allowed;opacity:0.6;}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="loader-spinner"></div>
+  <p>Loading Dashboard...</p>
+</div>
+
+<div class="page-content" style="display:none;">
+  <header>
+    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135789.png" alt="logo">
+    <h2>GOLD TRADE INVESTING</h2>
+  </header>
+
+  <div class="announcement"><span>💰 Welcome to GOLD TRADE INVESTING – Trusted Global Investment Platform 💰</span></div>
+
+  <div class="balance-section">
+    <div class="email" id="user-email">Guest User</div>
+    <div class="balance" id="user-balance">Balance: KSh 0</div>
+    <div class="balance-buttons">
+      <button onclick="location.href='deposit.html'">Deposit</button>
+      <button onclick="location.href='withdraw.html'">Withdraw</button>
+      <button onclick="location.href='company.html'">Company</button>
+    </div>
+  </div>
+
+  <div class="extra-info">
+    <p>
+      GOLD TRADE INVESTING offers sustainable and transparent investment opportunities in commodities and financial markets.
+      Our mission is to empower investors globally through trusted digital platforms and real-time analytics.
+      Upgrade your VIP level today to maximize daily returns. Minimum investment: <strong>3,000 KSh</strong>.
+    </p>
+    <button class="claim-btn" id="claim-btn">Claim 100 KSh</button>
+  </div>
+
+  <div class="task-countdown">Next Task Reset: <span id="countdown"></span></div>
+
+  <div class="vip-list" id="vip-list"></div>
+</div>
+
+<nav>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Home</a>
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Task</a>
+  <a href="team.html"><i class="fas fa-users"></i><br>Team</a>
+  <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Me</a>
+</nav>
+
+<script>
+let userBalance = 0;
+
+auth.onAuthStateChanged(user => {
+  const loader = document.getElementById('loader');
+  const page = document.querySelector('.page-content');
+  const emailDisplay = document.getElementById('user-email');
+  const balanceDisplay = document.getElementById('user-balance');
+  const claimBtn = document.getElementById('claim-btn');
+  const vipList = document.getElementById('vip-list');
+
+  loader.classList.add('hidden');
+  setTimeout(() => page.style.display = 'block', 300);
+
+  if (user) {
+    const uid = user.uid;
+    emailDisplay.textContent = user.email;
+
+    db.ref('users/' + uid + '/balance').on('value', snap => {
+      userBalance = parseFloat(snap.val() || 0);
+      balanceDisplay.textContent = `Balance: KSh ${userBalance.toLocaleString()}`;
+    });
+
+    db.ref('users/' + uid + '/claimed').once('value').then(snap => {
+      if (snap.exists() && snap.val() === true) {
+        claimBtn.textContent = "Claimed ✅";
+        claimBtn.classList.add('disabled-btn');
+        claimBtn.disabled = true;
+      }
+    });
+
+    claimBtn.onclick = () => {
+      db.ref('users/' + uid + '/claimed').once('value').then(snap => {
+        if (snap.exists() && snap.val() === true) {
+          showPopup("You have already claimed this reward.", true);
+        } else {
+          db.ref('users/' + uid + '/balance').transaction(balance => (balance || 0) + 100);
+          db.ref('users/' + uid + '/claimed').set(true);
+          claimBtn.textContent = "Claimed ✅";
+          claimBtn.classList.add('disabled-btn');
+          claimBtn.disabled = true;
+          showPopup("🎉 100 KSh Claimed Successfully!");
+        }
+      });
+    };
+  }
+
+  const vipPlans = [
+    { name: "Starter", amount: 3000 },
+    { name: "Basic", amount: 8000 },
+    { name: "Silver", amount: 15000 },
+    { name: "Gold", amount: 30000 },
+    { name: "Platinum", amount: 50000 },
+    { name: "Diamond", amount: 100000 },
+    { name: "Elite", amount: 200000 },
+    { name: "Royal", amount: 300000 },
+    { name: "Legend", amount: 500000 },
+    { name: "Ultimate", amount: 1000000 }
+  ];
+
+  function renderVIP() {
+    vipList.innerHTML = '';
+    vipPlans.forEach(v => {
+      const div = document.createElement('div');
+      div.className = 'vip-box';
+      div.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828640.png">
+        <div class="info">
+          <p>${v.name} Plan – Unlock amount: <span class="amount">KSh ${v.amount.toLocaleString()}</span></p>
+          <p>Income available in 24 hours</p>
+        </div>
+        <div class="arrow"></div>`;
+      
+      // Add click event for VIP unlock
+      div.querySelector('.arrow').onclick = () => {
+        if (userBalance >= v.amount) {
+          showPopup(`Opening ${v.name} Plan...`);
+        } else {
+          showPopup("⚠️ Please unlock VIP level first", true);
+        }
+      };
+
+      vipList.appendChild(div);
+    });
+  }
+
+  renderVIP();
+  startCountdown();
+});
+
+function startCountdown() {
+  const c = document.getElementById('countdown');
+  let start = localStorage.getItem('startTime') || Date.now();
+  localStorage.setItem('startTime', start);
+  setInterval(() => {
+    let diff = 86400000 - (Date.now() - start);
+    if (diff <= 0) { start = Date.now(); localStorage.setItem('startTime', start); diff = 86400000; }
+    const h = Math.floor(diff / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
+    c.textContent = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+  }, 1000);
+}
+
+function showPopup(msg, red = false) {
+  const p = document.createElement('div');
+  p.className = 'popup' + (red ? ' red' : '');
+  p.textContent = msg;
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 3000);
+}
+</script>
+</body>
+</html>
