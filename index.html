@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>GOLD TRADE INVESTING – Official Platform</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --gold: #ffcc00;
+      --dark-blue: #0d1b3f;
+      --text-light: #e0e0e0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-light);
+      background:
+        radial-gradient(circle at 25% 30%, rgba(255,255,255,0.15) 0%, transparent 60%),
+        radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 0%, transparent 55%),
+        linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+
+    header {
+      background: rgba(13,27,63,0.92);
+      color: #fff;
+      padding: 18px 20px;
+      text-align: center;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+      color: var(--gold);
+      letter-spacing: 1px;
+    }
+
+    header p {
+      margin: 4px 0 0;
+      font-size: 13px;
+      color: #bfcde0;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .section {
+      background: rgba(13,27,63,0.92);
+      padding: 28px;
+      border-radius: 14px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      margin-bottom: 30px;
+      animation: fadeIn .6s ease;
+    }
+
+    @keyframes fadeIn { from {opacity:0; transform:translateY(8px);} to {opacity:1; transform:translateY(0);} }
+
+    h2 {
+      color: var(--gold);
+      margin-bottom: 12px;
+      font-size: 22px;
+    }
+
+    p {
+      line-height: 1.6;
+      color: #e5eaf5;
+      font-size: 15px;
+    }
+
+    ul {
+      margin: 10px 0 0 18px;
+      color: #e5eaf5;
+    }
+
+    .cta {
+      text-align: center;
+      margin-top: 25px;
+    }
+
+    .cta a {
+      background: var(--gold);
+      color: var(--dark-blue);
+      font-weight: 700;
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background .3s ease;
+    }
+
+    .cta a:hover {
+      background: #fbc02d;
+    }
+
+    footer {
+      text-align: center;
+      padding: 16px;
+      color: #aeb8cc;
+      font-size: 13px;
+      margin-top: 40px;
+    }
+
+    .highlight {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>GOLD TRADE INVESTING</h1>
+    <p>Secure • Reliable • Profitable</p>
+  </header>
+
+  <main>
+    <section class="section">
+      <h2>About Us</h2>
+      <p>
+        <strong>GOLD TRADE INVESTING</strong> is a trusted online investment platform
+        specializing in gold, digital assets, and emerging market portfolios.  
+        Our mission is to empower everyday investors to access global trading opportunities
+        with transparency, automation, and guaranteed daily returns.
+      </p>
+      <p>
+        We are committed to providing secure and reliable investment solutions that allow clients to grow
+        their capital through innovative trading systems and professional financial strategies.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>Our Core Services</h2>
+      <ul>
+        <li><span class="highlight">Gold Trading:</span> Invest directly in gold markets with optimized returns.</li>
+        <li><span class="highlight">Crypto Investments:</span> Leverage blockchain-backed projects for secure profits.</li>
+        <li><span class="highlight">Referral Rewards:</span> Earn bonuses by inviting others to join the platform.</li>
+        <li><span class="highlight">Daily Earnings:</span> Watch your profits grow automatically every 24 hours.</li>
+        <li><span class="highlight">Instant Withdrawals:</span> Withdraw funds directly to your account with zero delays.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Why Choose Us?</h2>
+      <p>
+        GOLD TRADE INVESTING was built to redefine financial freedom.  
+        We blend modern technology, real-time analytics, and market expertise
+        to ensure your investment journey is smooth and rewarding.
+      </p>
+      <ul>
+        <li>🛡️ Transparent operations with audited systems.</li>
+        <li>📈 Guaranteed daily profit growth.</li>
+        <li>💳 Fast deposit & withdrawal systems (M-Pesa, Crypto, Bank).</li>
+        <li>🤝 Dedicated customer support 24/7.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Getting Started</h2>
+      <p>
+        Create your account in minutes and start investing today.  
+        Whether you're a beginner or professional trader, our smart system will help you grow.
+      </p>
+      <div class="cta">
+        <a href="signup.html">Create Account Now</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="year"></span> GOLD TRADE INVESTING. All Rights Reserved.
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+  <!-- Firebase Initialization -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+    import { getDatabase, ref, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDcZ_fmMYb52-f6q6rKZwicXHFM1HENoIo",
+      authDomain: "dckex-6be85.firebaseapp.com",
+      databaseURL: "https://dckex-6be85-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "dckex-6be85",
+      storageBucket: "dckex-6be85.firebasestorage.app",
+      messagingSenderId: "534675762848",
+      appId: "1:534675762848:web:d785527442e9f42b5823c5",
+      measurementId: "G-CE8CPKYDBW"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Example: log a visitor view (optional)
+    const visitorRef = ref(db, "visits/" + Date.now());
+    set(visitorRef, { visitedAt: serverTimestamp() });
+  </script>
+
+</body>
+</html>
