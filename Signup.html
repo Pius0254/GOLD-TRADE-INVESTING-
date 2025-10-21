@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up – GOLD TRADE INVESTING</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 48px;
+    background:
+      radial-gradient(circle at 25% 30%, rgba(255,255,255,0.15) 0%, transparent 60%),
+      radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 0%, transparent 55%),
+      linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    background-attachment: fixed;
+  }
+  .card {
+    background: rgba(13, 27, 63, 0.92);
+    color: #fff;
+    padding: 28px;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    max-width: 420px;
+    width: 90%;
+    animation: fadeIn .6s ease;
+  }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+  .brand { text-align: center; margin-bottom: 20px; }
+  .brand h1 { font-size: 22px; margin: 6px 0 4px; }
+  .brand span { font-size: 13px; color: #e0e0e0; }
+  .ref-banner { display: none; background: rgba(227,242,253,0.3); color: #fff; text-align: center; padding: 8px; font-size: 14px; border-radius: 6px; margin-bottom: 14px; }
+  label { font-size: 14px; display: block; margin: 10px 0 4px; color: #f5f5f5; }
+  .phone-row { display: flex; align-items: center; gap: 8px; }
+  .phone-code { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); padding: 10px 12px; border-radius: 6px; display: flex; align-items: center; gap: 6px; font-size: 14px; }
+  .phone-code span { font-size: 18px; }
+  .phone-number { flex: 1; padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: #fff; }
+  .phone-number::placeholder { color: #ccc; }
+  input[type="text"],input[type="email"],input[type="password"] { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: #fff; }
+  input::placeholder { color: #ccc; }
+  input:focus { outline: none; border-color: #90caf9; }
+  button { width: 100%; padding: 12px; background-color: #ffcc00; color: #0d1b3f; font-weight: 700; border: none; border-radius: 6px; margin-top: 15px; cursor: pointer; transition: background 0.3s ease; }
+  button:hover { background-color: #fbc02d; }
+  .links { text-align: center; margin-top: 18px; font-size: 14px; color: #e0e0e0; }
+  .links a { color: #90caf9; text-decoration: none; }
+  .links a:hover { text-decoration: underline; }
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #323232; color: #fff; padding: 12px 24px; border-radius: 6px; opacity: 0; pointer-events: none; transition: opacity .3s ease; z-index: 9999; font-size: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+  .toast.show { opacity: 1; }
+  .toast.success { background: #2e7d32; }
+  .toast.error { background: #c62828; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brand">
+    <h1>GOLD TRADE INVESTING</h1>
+    <span>Secure • Reliable • Growth</span>
+  </div>
+  <div id="refBanner" class="ref-banner"></div>
+  <label for="username">Username</label>
+  <input type="text" id="username" placeholder="Choose a username" required>
+  <label for="phone">Phone Number</label>
+  <div class="phone-row">
+    <div class="phone-code"><span>🇰🇪</span> +254</div>
+    <input type="tel" id="phone" class="phone-number" placeholder="712345678" required>
+  </div>
+  <label for="email">Email</label>
+  <input type="email" id="email" placeholder="Enter your email" required>
+  <label for="password">Password</label>
+  <input type="password" id="password" placeholder="Minimum 6 characters" required>
+  <label for="confirmPassword">Confirm Password</label>
+  <input type="password" id="confirmPassword" placeholder="Repeat password" required>
+  <button id="signupBtn">Create Account</button>
+  <div class="links">Already have an account? <a href="signin.html">Sign In</a><br></div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+import { getDatabase, ref, set, get, update, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
+
+// ✅ GOLD TRADE INVESTING Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyDcZ_fmMYb52-f6q6rKZwicXHFM1HENoIo",
+  authDomain: "dckex-6be85.firebaseapp.com",
+  databaseURL: "https://dckex-6be85-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "dckex-6be85",
+  storageBucket: "dckex-6be85.firebasestorage.app",
+  messagingSenderId: "534675762848",
+  appId: "1:534675762848:web:d785527442e9f42b5823c5",
+  measurementId: "G-CE8CPKYDBW"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+function toast(msg,type="error",delay=3000){
+  const el=document.getElementById("toast");
+  el.textContent=msg;
+  el.className="toast "+type+" show";
+  setTimeout(()=>el.className="toast "+type,delay);
+}
+
+// ✅ Capture referrer username from URL
+const params = new URLSearchParams(window.location.search);
+const referrerUsername = params.get("ref");
+if(referrerUsername){
+  const banner = document.getElementById("refBanner");
+  banner.style.display="block";
+  banner.textContent = "You were invited by: "+referrerUsername;
+}
+
+document.getElementById("signupBtn").addEventListener("click", async ()=>{
+  const username = document.getElementById("username").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const confirm = document.getElementById("confirmPassword").value;
+
+  if(!username || !phone || !email || !password || !confirm) return toast("Please fill all fields");
+  if(password.length<6) return toast("Password must be at least 6 characters");
+  if(password!==confirm) return toast("Passwords do not match");
+
+  try {
+    const cred = await createUserWithEmailAndPassword(auth,email,password);
+    const uid = cred.user.uid;
+
+    await set(ref(db,"users/"+uid),{
+      uid, username, phone, email,
+      joinedAt: serverTimestamp(),
+      balance: 0,
+      earnings: 0,
+      referralsCount: 0,
+      referrer: referrerUsername || null
+    });
+
+    if(referrerUsername){
+      const refSnap = await get(ref(db,"users"));
+      if(refSnap.exists()){
+        let referrerUid = null;
+        refSnap.forEach(child=>{
+          if(child.val().username === referrerUsername) referrerUid = child.key;
+        });
+        if(referrerUid){
+          await set(ref(db,"referrals/"+referrerUid+"/"+uid),{
+            username, email, joinedAt: serverTimestamp()
+          });
+          await update(ref(db,"users/"+referrerUid),{
+            referralsCount: increment(1)
+          });
+        }
+      }
+    }
+
+    toast("Account created successfully!","success");
+    setTimeout(()=>location.href="dashboard.html",1200);
+
+  } catch(err){
+    console.error("Signup error:", err);
+    toast("Signup failed: "+(err.code||err.message||"Unknown"));
+  }
+});
+</script>
+</body>
+                                </html>
